@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} Список книг у вас {% endblock %}
+
+{% block content %}
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% endif %}
+
+<b>Список книг, які ви зараз утримуєте в себе:</b><br>
+{% for book in books %}
+<p>{{ book }}</p>
+{% endfor %}
+{% endblock content %}

@@ -1,0 +1,34 @@
+{% extends "panel_base.html" %}
+
+{% block title %} Список книг в користувачів {% endblock %}
+
+{% block content %}
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% endif %}
+
+<b>Список книг "на руках":</b><br>
+<table>
+    <thead>
+    <tr>
+        <th>Автор(и)</th>
+        <th>Назва</th>
+        <th>Хто використовує</th>
+        <th>Прийняти книгу?</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for pk, user_id, author, title, user_name in books %}
+        <tr>
+            <form method="POST" action="/panel/books/get/{{pk}}/{{user_id}}/">
+                {% csrf_token %}
+                <td>{{ author }}</td>
+                <td>{{ title }}</td>
+                <td>{{ user_name }}</td>
+                <td><input type="submit" value="Прийняти"> </td>
+            </form>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Бібліотека {% endblock %}</title>
+</head>
+<body>
+{% include 'head.html' %}
+{% include 'messages.html' %}
+
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% endif %}
+
+{% block content %}
+{% endblock content %}
+
+</body>
+</html>

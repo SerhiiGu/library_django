@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %} Список непрочитаних книг {% endblock %}
+
+{% block content %}
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% endif %}
+
+<b>Список не прочитаних книг в бібліотеці:</b><br><br>
+<table>
+    <thead>
+    <tr>
+        <th>Автор(и)</th>
+        <th></th>Назва</th>
+        <th>Зарезервувати для читання?</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for pk, user_id, author, title, can_booking in books %}
+    <tr>
+            <form method="POST" action="/books/{{pk}}/">
+                {% csrf_token %}
+                <td>{{ author }}</td>
+                <td>{{ title }}</td>
+                {% if can_booking == "yes" %}
+                    <td><input type="submit" value="Зарезервувати для читання"> </td>
+                {% else %}
+                    <td>Немає в наявності</td>
+                {% endif %}
+            </form>
+    <tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

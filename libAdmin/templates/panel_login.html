@@ -1,0 +1,14 @@
+{% extends "panel_base.html" %}
+
+{% block title %} Вхід в адмінку {% endblock %}
+
+{% block content %}
+
+<b>Форма для входу</b><br>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="Логін" required>
+    <input type="password" name="password" placeholder="Пароль" required>
+    <input type="submit" value="Увійти">
+</form>
+{% endblock content %}

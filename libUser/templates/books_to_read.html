@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} Список зарезервованих книг {% endblock %}
+
+{% block content %}
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% endif %}
+
+<b>Список зарезервованих книг:</b><br><br>
+<table>
+    <thead>
+    <tr>
+        <th>Автор(и)</th>
+        <th>Назва</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for book in books %}
+        <td>{{ book.book.author }}</td>
+        <td>{{ book.book.title }}</td>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

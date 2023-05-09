@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Вхід в систему {% endblock %}
+
+{% block content %}
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% endif %}
+
+<b>Форма для входу</b><br>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="Логін" required>
+    <input type="password" name="password" placeholder="Пароль" required>
+    <input type="submit" value="Увійти">
+</form>
+{% endblock content %}

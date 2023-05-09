@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Реєстрація користувача {% endblock %}
+
+{% block content %}
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% endif %}
+<b>Форма реєстрації</b><br>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="Логін" required>
+    <input type="password" name="password" placeholder="Пароль" required>
+    <input type="text" name="email" placeholder="e-mail" required>
+    <input type="submit" value="Зареєструватись">
+</form>
+{% endblock content %}

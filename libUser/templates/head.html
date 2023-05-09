@@ -1,0 +1,39 @@
+<p align="center" style="font-size: 24px; color: brown"><b>Бібліотека</b></p>
+<div style="width:100%; height:100%; border:1px solid black;"> </div>
+<table align="left">
+    <td>
+        <a href="{% url 'books_on_read' %}" style="font-size: 20px">Книги у вас</a> &emsp;
+        <a href="{% url 'books_unreaded' %}" style="font-size: 20px">Непрочитані</a> &emsp;
+        <a href="{% url 'books_readed' %}" style="font-size: 20px">Прочитані</a> &emsp;
+        <a href="{% url 'books_to_read' %}" style="font-size: 20px">Зарезервовані для прочитання</a> &emsp;
+        <a href="{% url 'books_ask_for_new' %}" style="font-size: 20px">Запит на нову книгу</a> &emsp;
+    </td>
+</table>
+<table align="right">
+    <td>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" style="font-size: 20px">Вихід</a>
+        {% else %}
+            <a href="{% url 'login' %}" style="font-size: 20px">Вхід</a> &emsp;
+            <a href="{% url 'register' %}" style="font-size: 20px">Реєстрація</a>
+        {% endif %}
+    </td>
+</table>
+<br><br>
+<div style="width:100%; height:100%; border:1px solid black;"> </div>
+<br>
+{% if user.is_authenticated %}
+<p align="right"> Вітаю, <b>{{user.username}}</b>
+    {% if request.user.is_superuser %}
+    (суперадмін)! Для коректної роботи потрібно увійти як користувач
+    {% elif perms.libUser.add_master %}
+    (адмін)! Для коректної роботи потрібно увійти як користувач
+    {% else %}
+    (користувач)!
+    {% endif %}
+</p>
+{% else %}
+<p align="right">Для доступу до всіх функцій необходіно увійти в систему</p>
+{% endif %}
+<br>
+

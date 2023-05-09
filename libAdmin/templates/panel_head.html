@@ -1,0 +1,38 @@
+<p align="center" style="font-size: 24px; color: brown"><b>Панель бібліотекаря</b></p>
+<div style="width:100%; height:100%; border:1px solid black;"> </div>
+<table align="left">
+    <td>
+        <a href="{% url 'panel_books_in_users' %}" style="font-size: 20px">Книги в користувачів</a> &emsp;
+        <a href="{% url 'panel_books_all' %}" style="font-size: 20px">Всі книги</a> &emsp;
+        <a href="{% url 'panel_books_free' %}" style="font-size: 20px">Вільні книги</a> &emsp;
+        <a href="{% url 'panel_requests_for_books' %}" style="font-size: 20px">Запити на книги</a> &emsp;
+        <a href="{% url 'panel_books_wait_list' %}" style="font-size: 20px">Список очікувань нових книг</a> &emsp;&emsp;&emsp;
+        <a href="{% url 'panel_book_add' %}" style="font-size: 20px">Додати книгу</a>
+    </td>
+</table>
+<table align="right">
+    <td>
+        {% if user.is_authenticated %}
+            <a href="{% url 'panel_logout' %}" style="font-size: 20px">Вихід з адмінки</a>
+        {% else %}
+            <a href="{% url 'panel_login' %}" style="font-size: 20px">Вхід в адмінку</a> &emsp;
+        {% endif %}
+    </td>
+</table>
+<br><br>
+<div style="width:100%; height:100%; border:1px solid black;"> </div>
+<br>
+{% if user.is_authenticated %}
+<p align="right">Вітаю, <b>{{user.username}}</b>
+    {% if request.user.is_superuser %}
+    (суперадмін)! Для коректної роботи потрібно увійти як адмін
+    {% elif perms.libUser.add_books %}
+    (адмін)
+    {% else %}
+    (користувач)! Для коректної роботи потрібно увійти як адмін
+    {% endif %}
+    </p>
+{% else %}
+<p align="right">Для доступу до всіх функцій необходіно увійти в систему як адмін</p>
+{% endif %}
+<br>

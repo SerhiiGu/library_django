@@ -1,0 +1,25 @@
+{% extends "panel_base.html" %}
+
+{% block title %} Список книг у користувачів {% endblock %}
+
+{% block content %}
+{% if message %}
+{{ message }}<br><br>
+{% endif %}
+
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% else %}
+
+<b>Додати книгу в бібліотеку:</b><br>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="author" placeholder="Автор(и) книги" required><br>
+    <input type="text" name="title" placeholder="Назва книги" required><br>
+    <textarea name="description" placeholder="Анотація" rows="5" cols="80" required></textarea><br>
+    <input type="number" name="all_count" placeholder="Кількість" required><br>
+    <input type="submit" value="Додати">
+</form>
+
+{% endif %}
+{% endblock content %}

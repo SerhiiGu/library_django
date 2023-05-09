@@ -1,0 +1,33 @@
+{% extends "panel_base.html" %}
+
+{% block title %} Список книг у бібліотеці {% endblock %}
+
+{% block content %}
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% endif %}
+
+<b>Список всіх книг у бібліотеці:</b><br>
+<table>
+    <thead>
+    <tr>
+        <th>Автор(и)</th>
+        <th>Назва</th>
+        <th>Всього</th>
+        <th>Вільно</th>
+        <th>Хто використовує</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for pk, author, title, all_count, free_count, users_use in books %}
+        <tr>
+            <td>{{ author }}</td>
+            <td>{{ title }}</td>
+            <td>{{ all_count }}</td>
+            <td>{{ free_count }}</td>
+            <td>{{ users_use | default_if_none:"" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

@@ -38,15 +38,10 @@ class NewBooks(models.Model):
 
 
 class BooksHistory(models.Model):
-    RANG_CHOICES = (
-        (0, 'No'),
-        (1, 'Yes'),
-    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Books, on_delete=models.CASCADE)
-    status = models.IntegerField(default=1, choices=RANG_CHOICES)
     dt_start = models.DateTimeField(auto_now_add=True)
     dt_end = models.DateTimeField(blank=True)
 
     def __str__(self):
-        return f'{self.user} {self.book} {self.status}'
+        return f'{self.user} {self.book}'

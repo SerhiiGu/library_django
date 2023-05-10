@@ -16,16 +16,21 @@
         <th>Всього</th>
         <th>Вільно</th>
         <th>Хто використовує</th>
+        <th>Редагувати книгу?</th>
     </tr>
     </thead>
     <tbody>
         {% for pk, author, title, all_count, free_count, users_use in books %}
         <tr>
-            <td>{{ author }}</td>
-            <td>{{ title }}</td>
-            <td>{{ all_count }}</td>
-            <td>{{ free_count }}</td>
-            <td>{{ users_use | default_if_none:"" }}</td>
+            <form method="GET" action="/panel/books/edit/{{pk}}/">
+                {% csrf_token %}
+                <td>{{ author }}</td>
+                <td>{{ title }}</td>
+                <td>{{ all_count }}</td>
+                <td>{{ free_count }}</td>
+                <td>{{ users_use | default_if_none:"" }}</td>
+                <td><input type="submit" value="Редагувати"></td>
+            </form>
         </tr>
         {% endfor %}
     </tbody>

@@ -1,0 +1,25 @@
+{% extends "panel_base.html" %}
+
+{% block title %} Редагування книги {% endblock %}
+
+{% block content %}
+{% if message %}
+{{ message }}<br><br>
+{% endif %}
+
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% else %}
+
+<b>Редагування книги:</b><br><br>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="author" placeholder="Автор(и) книги" value="{{book.author}}" required><br>
+    <input type="text" name="title" placeholder="Назва книги" value="{{book.title}}" required><br>
+    <textarea name="description" placeholder="Анотація" rows="5" cols="80" required>{{book.description}}</textarea><br>
+    <input type="number" name="all_count" placeholder="Кількість" value="{{book.all_count}}" min="{{min}}" required><br>
+    <input type="submit" value="Додати">
+</form>
+
+{% endif %}
+{% endblock content %}

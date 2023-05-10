@@ -14,6 +14,7 @@
         <th>Автор(и)</th>
         <th>Назва</th>
         <th>Видати книгу</th>
+        <th>Відмовити у видачі</th>
     </tr>
     </thead>
     <tbody>
@@ -24,6 +25,10 @@
                 <td>{{ book.book.author }}</td>
                 <td>{{ book.book.title }}</td>
                 <td><input type="submit" value="Видати книгу"></td>
+            </form>
+            <form method="POST" action="/panel/books/give_reject/{{book.book_id}}/{{book.user_id}}/">
+                {% csrf_token %}
+                <td><input type="submit" value="Відмовити у видачі"></td>
             </form>
         </tr>
         {% endfor %}

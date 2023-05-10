@@ -43,8 +43,24 @@ def books_to_read(request):
 
 
 @login_required(login_url='/login/')
+def books_booking_reject(request, book_id):
+    if request.method == 'POST':
+        user_book = UserBooks.objects.filter(user_id=request.user.id, book_id=book_id).first()
+        user_book.delete()
+        messages.success(request, "Бронювання скасовано")
+        return redirect('books_to_read')
+    messages.error(request, "Неможливий запит на цю адресу!")
+    return redirect('books_to_read')
+
+
+@login_required(login_url='/login/')
 def books_booking_to_read(request, pk):
     if request.method == 'POST':
+        already_booked = UserBooks.objects.filter(book_id=pk, user_id=request.user.id).first()
+        if already_booked:
+            messages.error(request, f'Неможливо зарезервувати. '
+                                    f'Книга "{already_booked.book.author} - {already_booked.book.title}" вже зарезервована!')
+            return redirect('books_unreaded')
         book = Books.objects.filter(pk=pk).first()
         book_add = UserBooks(status=2, book_id=pk, user_id=request.user.id)
         book_add.save()

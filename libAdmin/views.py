@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+import datetime
 
 from libUser.models import *
 from libUser.utils.user_utils import *
@@ -20,6 +21,9 @@ def panel_books_in_users(request):
 
 
 def panel_book_from_user(request, pk, user_id):
+    if not request.user.has_perm('libUser.add_books'):
+        return render(request, "panel_books_in_users.html",
+                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
     if request.method == 'POST':
         book = Books.objects.filter(pk=pk).first()
         book.free_count += 1
@@ -28,6 +32,9 @@ def panel_book_from_user(request, pk, user_id):
         history = UserBooks.objects.filter(book_id=book.id, user_id=user_id).first()
         history.status = 0
         history.save()
+        book_history = BooksHistory.objects.filter(book_id=book.id, user_id=user_id).first()
+        book_history.dt_end = datetime.datetime.now(datetime.timezone.utc)
+        book_history.save()
         messages.success(request, "Книга прийнята")
         return redirect('panel_books_in_users')
     messages.error(request, "Неможливий запит на цю адресу!")
@@ -41,6 +48,31 @@ def panel_books_all(request):
     all_books = Books.objects.all()
     books = query_to_list(all_books)
     return render(request, "panel_books_all.html", {"books": books})
+
+
+def panel_book_edit(request, book_id):
+    if not request.user.has_perm('libUser.add_books'):
+        return render(request, "panel_books_all.html",
+                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+    if request.method == 'POST':
+        book = Books.objects.filter(id=book_id).first()
+        book.author = request.POST['author']
+        book.title = request.POST['title']
+        book.description = request.POST['description']
+        new_all = int(request.POST['all_count'])
+        if new_all > book.all_count:
+            diff = new_all - book.all_count
+            book.free_count = diff + book.free_count
+        else:
+            diff = book.all_count - new_all
+            book.free_count = book.free_count - diff
+        book.all_count = int(request.POST['all_count'])
+        book.save()
+        messages.success(request, "Книгу відредаговано")
+        return redirect('panel_books_all')
+    book = Books.objects.filter(id=book_id).first()
+    min = book.all_count - book.free_count
+    return render(request, 'panel_book_edit.html', {"book": book, "min": min})
 
 
 def panel_books_free(request):
@@ -61,6 +93,9 @@ def panel_requests_for_books(request):
 
 
 def panel_book_give_to_user(request, book_id, user_id):
+    if not request.user.has_perm('libUser.add_books'):
+        return render(request, "panel_requests_for_books.html",
+                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
     if request.method == 'POST':
         user_book = UserBooks.objects.filter(user_id=user_id, book_id=book_id).first()
         user_book.status = 1
@@ -69,11 +104,25 @@ def panel_book_give_to_user(request, book_id, user_id):
         book.free_count -= 1
         book.users_use = book.users_use + str(user_book.user_id) + ','
         book.save()
+        book_history = BooksHistory(book_id=book_id, user_id=user_book.user_id, dt_end=datetime.datetime.utcfromtimestamp(0))
+        book_history.save()
         messages.success(request, "Книга видана")
         return redirect('panel_requests_for_books')
     messages.error(request, "Неможливий запит на цю адресу!")
     return redirect('panel_requests_for_books')
-    pass
+
+
+def panel_book_give_reject_to_user(request, book_id, user_id):
+    if not request.user.has_perm('libUser.add_books'):
+        return render(request, "panel_requests_for_books.html",
+                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+    if request.method == 'POST':
+        user_book = UserBooks.objects.filter(user_id=user_id, book_id=book_id).first()
+        user_book.delete()
+        messages.success(request, "Бронювання скасовано")
+        return redirect('panel_requests_for_books')
+    messages.error(request, "Неможливий запит на цю адресу!")
+    return redirect('panel_requests_for_books')
 
 
 def panel_books_wait_list(request):

@@ -6,6 +6,7 @@ urlpatterns = [
     path('books/unreaded/', libUser.views.books_unreaded, name='books_unreaded'),
     path('books/readed/', libUser.views.books_readed, name='books_readed'),
     path('books/to_read/', libUser.views.books_to_read, name='books_to_read'),
+    path('books/booking_reject/<int:book_id>/', libUser.views.books_booking_reject, name='books_booking_reject'),
     path('books/<int:pk>/', libUser.views.books_booking_to_read, name='books_booking_to_read'),
     path('books/ask_for_new/', libUser.views.books_ask_for_new, name='books_ask_for_new'),
 

@@ -13,12 +13,19 @@
     <tr>
         <th>Автор(и)</th>
         <th>Назва</th>
+        <th>Відмовитися від резервування?</th>
     </tr>
     </thead>
     <tbody>
     {% for book in books %}
-        <td>{{ book.book.author }}</td>
-        <td>{{ book.book.title }}</td>
+        <tr>
+            <form method="POST" action="/books/booking_reject/{{book.book.pk}}/">
+                {% csrf_token %}
+                <td>{{ book.book.author }}</td>
+                <td>{{ book.book.title }}</td>
+                <td><input type="submit" value="Відмовитися"></td>
+            </form>
+        </tr>
     {% endfor %}
     </tbody>
 </table>

@@ -25,11 +25,11 @@
 {% if user.is_authenticated %}
 <p align="right">Вітаю, <b>{{user.username}}</b>
     {% if request.user.is_superuser %}
-    (суперадмін)! Для коректної роботи потрібно увійти як адмін
+    (суперадмін)!
     {% elif perms.libUser.add_books %}
     (адмін)
     {% else %}
-    (користувач)! Для коректної роботи потрібно увійти як адмін
+    (користувач)!
     {% endif %}
     </p>
 {% else %}

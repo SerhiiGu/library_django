@@ -4,6 +4,10 @@
 
 {% block content %}
 
+{% if messages %}
+<b>{{error}}</b><br><br><br>
+{% endif %}
+
 <b>Форма для входу</b><br>
 <form method="POST">
     {% csrf_token %}

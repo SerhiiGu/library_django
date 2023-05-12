@@ -9,8 +9,8 @@ from libUser.utils.user_utils import *
 
 def panel_books_in_users(request):
     if not request.user.has_perm('libUser.add_books'):
-        return render(request, "panel_books_in_users.html",
-                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+        messages.error(request, "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки")
+        return redirect('panel_login')
     books = []
     books_used = Books.objects.filter(users_use__gt=1).all()
     for book in books_used:
@@ -22,8 +22,8 @@ def panel_books_in_users(request):
 
 def panel_book_from_user(request, pk, user_id):
     if not request.user.has_perm('libUser.add_books'):
-        return render(request, "panel_books_in_users.html",
-                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+        messages.error(request, "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки")
+        return redirect('panel_login')
     if request.method == 'POST':
         book = Books.objects.filter(pk=pk).first()
         book.free_count += 1
@@ -43,8 +43,8 @@ def panel_book_from_user(request, pk, user_id):
 
 def panel_books_all(request):
     if not request.user.has_perm('libUser.add_books'):
-        return render(request, "panel_books_all.html",
-                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+        messages.error(request, "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки")
+        return redirect('panel_login')
     all_books = Books.objects.all()
     books = query_to_list(all_books)
     return render(request, "panel_books_all.html", {"books": books})
@@ -52,8 +52,8 @@ def panel_books_all(request):
 
 def panel_book_edit(request, book_id):
     if not request.user.has_perm('libUser.add_books'):
-        return render(request, "panel_books_all.html",
-                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+        messages.error(request, "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки")
+        return redirect('panel_login')
     if request.method == 'POST':
         book = Books.objects.filter(id=book_id).first()
         book.author = request.POST['author']
@@ -77,8 +77,8 @@ def panel_book_edit(request, book_id):
 
 def panel_books_free(request):
     if not request.user.has_perm('libUser.add_books'):
-        return render(request, "panel_books_free.html",
-                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+        messages.error(request, "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки")
+        return redirect('panel_login')
     free_books = Books.objects.filter(free_count__gt=0).all()
     books = query_to_list(free_books)
     return render(request, "panel_books_free.html", {"books": books})
@@ -86,16 +86,16 @@ def panel_books_free(request):
 
 def panel_requests_for_books(request):
     if not request.user.has_perm('libUser.add_books'):
-        return render(request, "panel_requests_for_books.html",
-                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+        messages.error(request, "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки")
+        return redirect('panel_login')
     books = UserBooks.objects.filter(status=2).all()
     return render(request, "panel_requests_for_books.html", {"books": books})
 
 
 def panel_book_give_to_user(request, book_id, user_id):
     if not request.user.has_perm('libUser.add_books'):
-        return render(request, "panel_requests_for_books.html",
-                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+        messages.error(request, "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки")
+        return redirect('panel_login')
     if request.method == 'POST':
         user_book = UserBooks.objects.filter(user_id=user_id, book_id=book_id).first()
         user_book.status = 1
@@ -114,8 +114,8 @@ def panel_book_give_to_user(request, book_id, user_id):
 
 def panel_book_give_reject_to_user(request, book_id, user_id):
     if not request.user.has_perm('libUser.add_books'):
-        return render(request, "panel_requests_for_books.html",
-                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+        messages.error(request, "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки")
+        return redirect('panel_login')
     if request.method == 'POST':
         user_book = UserBooks.objects.filter(user_id=user_id, book_id=book_id).first()
         user_book.delete()
@@ -127,8 +127,8 @@ def panel_book_give_reject_to_user(request, book_id, user_id):
 
 def panel_books_wait_list(request, page):
     if not request.user.has_perm('libUser.add_books'):
-        return render(request, "panel_books_wait_list.html",
-                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+        messages.error(request, "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки")
+        return redirect('panel_login')
     if request.method == 'POST':
         book_id = request.POST['book_id']
         status = request.POST['status']
@@ -152,8 +152,8 @@ def panel_books_wait_list(request, page):
 
 def panel_book_add(request):
     if not request.user.has_perm('libUser.add_books'):
-        return render(request, "panel_add_book.html",
-                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+        messages.error(request, "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки")
+        return redirect('panel_login')
     if request.method == 'POST':
         book = Books(
             author=request.POST['author'],

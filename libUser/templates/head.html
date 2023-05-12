@@ -25,9 +25,9 @@
 {% if user.is_authenticated %}
 <p align="right"> Вітаю, <b>{{user.username}}</b>
     {% if request.user.is_superuser %}
-    (суперадмін)! Для коректної роботи потрібно увійти як користувач
-    {% elif perms.libUser.add_master %}
-    (адмін)! Для коректної роботи потрібно увійти як користувач
+    (суперадмін)!
+    {% elif perms.libUser.add_books %}
+    (адмін)!
     {% else %}
     (користувач)!
     {% endif %}

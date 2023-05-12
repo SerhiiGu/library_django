@@ -9,7 +9,6 @@ urlpatterns = [
     path('books/booking_reject/<int:book_id>/', libUser.views.books_booking_reject, name='books_booking_reject'),
     path('books/<int:pk>/', libUser.views.books_booking_to_read, name='books_booking_to_read'),
     path('books/ask_for_new/', libUser.views.books_ask_for_new, name='books_ask_for_new'),
-
     path('login/', libUser.views.login_handler, name='login'),
     path('logout/', libUser.views.logout_handler, name='logout'),
     path('register/', libUser.views.register_handler, name='register'),

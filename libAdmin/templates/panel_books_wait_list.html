@@ -1,0 +1,54 @@
+{% extends "panel_base.html" %}
+
+{% block title %} Запити на нові книги {% endblock %}
+
+{% block content %}
+
+{% include 'panel_books_waiting_submenu.html' %}
+
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% endif %}
+
+<b>Запити на розширення асортименту бібліотеки:</b><br><br>
+
+<table>
+    <thead>
+    <tr>
+        <th>Автор(и)</th>
+        <th>Назва</th>
+        <th>Короткий опис</th>
+        <th>Статус</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+                <td>{{ book.author }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.description }}</td>
+                <td>
+                {%if book.status == 'waiting' %}
+                    <form method="POST">
+                    {% csrf_token %}
+                        <input type="number" name="book_id" value="{{book.id}}" hidden>
+                        <input type="text" name="status" value="approved" hidden>
+                    <input type="submit" value="Прийняти">
+                    </form>
+                     <form method="POST">
+                    {% csrf_token %}
+                         <input type="number" name="book_id" value="{{book.id}}" hidden>
+                         <input type="text" name="status" value="rejected" hidden>
+                    <input type="submit" value="Відхилити">
+                    </form>
+                {% elif book.status == 'approved' %}
+                    <span style="color:green";>Затверджено</span>
+                {% else %}
+                    <span style="color:red";>Відхилено</span>
+                {% endif %}
+                </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

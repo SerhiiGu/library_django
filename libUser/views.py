@@ -72,7 +72,17 @@ def books_booking_to_read(request, pk):
 
 @login_required(login_url='/login/')
 def books_ask_for_new(request):
-    return None
+    if request.method == 'POST':
+        book = NewBooks(
+            author=request.POST['author'],
+            title=request.POST['title'],
+            description=request.POST['description'],
+            user_id=request.user.id,
+            status='waiting'
+        )
+        book.save()
+    books = NewBooks.objects.filter(user_id=request.user.id).all()
+    return render(request, "books_ask_for_new.html", {"books": books})
 
 
 def login_handler(request):

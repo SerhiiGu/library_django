@@ -125,8 +125,29 @@ def panel_book_give_reject_to_user(request, book_id, user_id):
     return redirect('panel_requests_for_books')
 
 
-def panel_books_wait_list(request):
-    return None
+def panel_books_wait_list(request, page):
+    if not request.user.has_perm('libUser.add_books'):
+        return render(request, "panel_books_wait_list.html",
+                      {"error": "Ви не увійшли, або ж не маєте прав для доступу до цієї сторінки"})
+    if request.method == 'POST':
+        book_id = request.POST['book_id']
+        status = request.POST['status']
+        book = NewBooks.objects.filter(id=book_id).first()
+        book.status = status
+        book.save()
+    match page:
+        case "rejected":
+            books = NewBooks.objects.filter(status='rejected').all()
+            return render(request, "panel_books_wait_list.html", {"books": books})
+        case "approved":
+            books = NewBooks.objects.filter(status='approved').all()
+            return render(request, "panel_books_wait_list.html", {"books": books})
+        case "all":
+            books = NewBooks.objects.all()
+            return render(request, "panel_books_wait_list.html", {"books": books})
+        case _:
+            books = NewBooks.objects.filter(status='waiting').all()
+            return render(request, "panel_books_wait_list.html", {"books": books})
 
 
 def panel_book_add(request):

@@ -1,0 +1,17 @@
+<div style="width:100%; height:100%; border:1px solid black;"> </div>
+<table align="left">
+    <td>
+        <span style="font-size:20px;">Список очікувань нових книг:</span>
+    </td>
+</table>
+<table align="center">
+    <td>
+        <a href="{% url 'panel_books_wait_list' 'waiting' %}" style="font-size: 20px">В очікуванні</a> &emsp;&emsp;&emsp;
+        <a href="{% url 'panel_books_wait_list' 'rejected' %}" style="font-size: 20px">Відхилені</a> &emsp;&emsp;&emsp;
+        <a href="{% url 'panel_books_wait_list' 'approved' %}" style="font-size: 20px">Затверджені</a> &emsp;&emsp;&emsp;
+        <a href="{% url 'panel_books_wait_list' 'all' %}" style="font-size: 20px">Всі запити</a>
+    </td>
+</table>
+
+<div style="width:100%; height:100%; border:1px solid black;"> </div>
+<br>

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %} Запит на нову книгу {% endblock %}
+
+{% block content %}
+{% if error %}
+<b>Виникла помилка:</b><br>{{error}}<br><br><br>
+{% endif %}
+
+<b>Опишіть книгу, яку б хотіли прочитати, і якої ще немає в бібліотеці</b><br><br>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="author" placeholder="Автор(и) книги" required><br>
+    <input type="text" name="title" placeholder="Назва книги" required><br>
+    <textarea name="description" placeholder="короткий опис(необов'язково)" rows="3" cols="50"></textarea><br>
+    <input type="submit" value="Додати">
+</form>
+
+<br><br>
+<b>Ваші минулі запити:</b><br>
+<table>
+    <thead>
+    <tr>
+        <th>Автор(и)</th>
+        <th>Назва</th>
+        <th>Короткий опис</th>
+        <th>Результат</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for book in books %}
+        <tr>
+                <td>{{ book.author }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.description }}</td>
+                <td>
+                {%if book.status == 'waiting' %}
+                    <span style="color:grey";>В очікуванні</span>
+                {% elif book.status == 'approved' %}
+                    <span style="color:green";>Затверджено</span>
+                {% else %}
+                    <span style="color:red";>Відхилено</span>
+                {% endif %}
+                </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

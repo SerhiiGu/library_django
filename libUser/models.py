@@ -5,10 +5,10 @@ from django.contrib.auth.models import User
 class Books(models.Model):
     author = models.CharField(max_length=100)
     title = models.CharField(max_length=255)
-    description = models.CharField(max_length=1024)
     all_count = models.IntegerField()
     free_count = models.IntegerField()
     users_use = models.CharField(max_length=255, null=True, blank=True)
+    description = models.CharField(max_length=1024)
 
     def __str__(self):
         return f'{self.author} : {self.title}'
@@ -29,9 +29,16 @@ class UserBooks(models.Model):
 
 
 class NewBooks(models.Model):
+    STATUSES = (
+        ('A', 'Approved'),
+        ('R', 'Rejected'),
+        ('W', 'Waiting')
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     author = models.CharField(max_length=100)
     title = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, null=True)
+    status = models.CharField(max_length=16)
 
     def __str__(self):
         return f'{self.author} {self.title}'

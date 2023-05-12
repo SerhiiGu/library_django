@@ -102,7 +102,10 @@ def panel_book_give_to_user(request, book_id, user_id):
         user_book.save()
         book = Books.objects.filter(pk=book_id).first()
         book.free_count -= 1
-        book.users_use = book.users_use + str(user_book.user_id) + ','
+        if book.users_use is None:
+            book.users_use = str(user_book.user_id) + ','
+        else:
+            book.users_use = book.users_use + str(user_book.user_id) + ','
         book.save()
         book_history = BooksHistory(book_id=book_id, user_id=user_book.user_id, dt_end=datetime.datetime.utcfromtimestamp(0))
         book_history.save()

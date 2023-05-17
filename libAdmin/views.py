@@ -98,9 +98,13 @@ def panel_book_give_to_user(request, book_id, user_id):
         return redirect('panel_login')
     if request.method == 'POST':
         user_book = UserBooks.objects.filter(user_id=user_id, book_id=book_id).first()
+        book = Books.objects.filter(pk=book_id).first()
+        if book.free_count == 0:
+            user_book.delete()
+            messages.error(request, "На жаль, вільних книг уже немає. Бронювання скасовано.")
+            return redirect('panel_requests_for_books')
         user_book.status = 1
         user_book.save()
-        book = Books.objects.filter(pk=book_id).first()
         book.free_count -= 1
         if book.users_use is None:
             book.users_use = str(user_book.user_id) + ','

@@ -18,7 +18,6 @@ def books_on_read(request):
 
 @login_required(login_url='/login/')
 def books_unreaded(request):
-    # unread_books = Books.objects.exclude(userbooks__user_id=request.user.id).exclude(userbooks__status=0).all()
     unread_books = Books.objects.exclude(userbooks__user_id=request.user.id, userbooks__status__in=[0, 1]).all()
     books = []
     for book in unread_books:

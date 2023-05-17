@@ -29,11 +29,6 @@ class UserBooks(models.Model):
 
 
 class NewBooks(models.Model):
-    STATUSES = (
-        ('A', 'Approved'),
-        ('R', 'Rejected'),
-        ('W', 'Waiting')
-    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     author = models.CharField(max_length=100)
     title = models.CharField(max_length=255)

@@ -18,7 +18,8 @@ def books_on_read(request):
 
 @login_required(login_url='/login/')
 def books_unreaded(request):
-    unread_books = Books.objects.exclude(userbooks__user_id=request.user.id, userbooks__status__in=[0, 1]).all()
+    # unread_books = Books.objects.exclude(userbooks__user_id=request.user.id, userbooks__status__in=[0, 1]).all()
+    unread_books = Books.objects.exclude(userbooks__user_id=request.user.id).all()
     books = []
     for book in unread_books:
         if book.free_count > 0:

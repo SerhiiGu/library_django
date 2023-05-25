@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 
 from libUser.models import *
@@ -47,7 +48,16 @@ def panel_books_all(request):
         return redirect('panel_login')
     all_books = Books.objects.all()
     books = query_to_list(all_books)
-    return render(request, "panel_books_all.html", {"books": books})
+    paginator = Paginator(books, 20)
+    page_number = request.GET.get('page', 1)
+    try:
+        page_obj = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page_number)
+    return render(request, "panel_books_all.html", {"page_obj": page_obj})
 
 
 def panel_book_edit(request, book_id):
@@ -81,7 +91,16 @@ def panel_books_free(request):
         return redirect('panel_login')
     free_books = Books.objects.filter(free_count__gt=0).all()
     books = query_to_list(free_books)
-    return render(request, "panel_books_free.html", {"books": books})
+    paginator = Paginator(books, 20)
+    page_number = request.GET.get('page', 1)
+    try:
+        page_obj = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page_number)
+    return render(request, "panel_books_free.html", {"page_obj": page_obj})
 
 
 def panel_requests_for_books(request):

@@ -8,7 +8,23 @@
 {% endif %}
 
 <b>Список прочитаних книг:</b><br><br>
-{% for book in books %}
+{% for book in page_obj %}
 {{ book }}<br>
 {% endfor %}
+
+<br>
+{% if page_obj.has_previous %}
+    <a href="?page=1">First</a>&emsp;
+    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>&emsp;
+{% else %}
+    First &emsp; Previous&emsp;
+{% endif %}
+<a> < Page {{page_obj.number}} of {{page_obj.paginator.num_pages}} > </a>&emsp;
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Next</a>&emsp;
+    <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+{% else %}
+    Next &emsp; Last
+{% endif %}
+
 {% endblock content %}

@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from django.contrib.auth.models import User
 # from django.http import HttpResponse
 
@@ -27,13 +28,31 @@ def books_unreaded(request):
         else:
             can_booking = "no"
         books.append((book.pk, request.user.id, book.author, book.title, can_booking))
-    return render(request, "books_unreaded.html", {"books": books})
+    paginator = Paginator(books, 20)
+    page_number = request.GET.get('page', 1)
+    try:
+        page_obj = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page_number)
+    return render(request, "books_unreaded.html", {"page_obj": page_obj})
 
 
 @login_required(login_url='/login/')
 def books_readed(request):
     readed_books = Books.objects.filter(userbooks__user_id=request.user.id, userbooks__status=0).all()
-    return render(request, "books_readed.html", {"books": readed_books})
+    paginator = Paginator(readed_books, 20)
+    page_number = request.GET.get('page', 1)
+    try:
+        page_obj = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page_number)
+    return render(request, "books_readed.html", {"page_obj": page_obj})
 
 
 @login_required(login_url='/login/')

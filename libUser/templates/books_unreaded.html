@@ -17,7 +17,7 @@
     </tr>
     </thead>
     <tbody>
-    {% for pk, user_id, author, title, can_booking in books %}
+    {% for pk, user_id, author, title, can_booking in page_obj %}
     <tr>
             <form method="POST" action="/books/{{pk}}/">
                 {% csrf_token %}
@@ -33,4 +33,19 @@
     {% endfor %}
     </tbody>
 </table>
+
+{% if page_obj.has_previous %}
+    <a href="?page=1">First</a>&emsp;
+    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>&emsp;
+{% else %}
+    First &emsp; Previous&emsp;
+{% endif %}
+<a> < Page {{page_obj.number}} of {{page_obj.paginator.num_pages}} > </a>&emsp;
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Next</a>&emsp;
+    <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+{% else %}
+    Next &emsp; Last
+{% endif %}
+
 {% endblock content %}
